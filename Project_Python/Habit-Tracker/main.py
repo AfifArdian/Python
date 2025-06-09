@@ -48,7 +48,7 @@ pixel_data = {
 response = requests.post(url=pixel_creation_endpoint, json=pixel_data, headers=header)
 print(response.text)
 
-
+# asd
 update_endpoint = f"{pixel_creation_endpoint}/{today.strftime('%Y%m%d')}"
 
 put_data = {
