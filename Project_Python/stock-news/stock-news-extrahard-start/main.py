@@ -1,8 +1,9 @@
 import requests
+import os
 from twilio.rest import Client
 
-VIRTUAL_TWILIO_NUMBER = "whatsapp:+14155238886"
-VERIFIED_NUMBER = "whatsapp:+6281295463018"
+VIRTUAL_TWILIO_NUMBER = os.environ["ENV_VIRTUAL_TWILIO_NUMBER"]
+VERIFIED_NUMBER = os.environ["ENV_VERIFIED_NUMBER"]
 
 STOCK_NAME = "IBM"
 COMPANY_NAME = "IBM"
@@ -11,9 +12,9 @@ STOCK_ENDPOINT = "https://www.alphavantage.co/query"
 NEWS_ENDPOINT = "https://newsapi.org/v2/everything"
 
 STOCK_APIKEY = "demo"
-NEWS_APIKEY = "3e2afe8e5aa04ee9a3f1816d0a2f8c30"
-account_sid = "AC610bb270f99a70e307a5ffbe4d0949fb"
-auth_token = "88d14a5c9af89b7630c039c0bae6e098"
+NEWS_APIKEY = os.environ["ENV_NEWS_APIKEY"]
+account_sid = os.environ["ENV_ACCOUNT_SID"]
+auth_token = os.environ["ENV_AUTH_TOKEN"]
 
 stock_parameter = {
     "function" : "TIME_SERIES_DAILY",
