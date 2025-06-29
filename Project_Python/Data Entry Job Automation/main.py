@@ -46,6 +46,7 @@ drive = webdriver.Chrome(options=chrome_options)
 drive.get(url=FORM_URL)
 
 for i in range(len(all_link_property)):
+    # Add fill in the link to your own Google From
     form = drive.find_elements(by=By.CLASS_NAME, value="whsOnd")
     address_property = form[0]
     price_property = form[1]
