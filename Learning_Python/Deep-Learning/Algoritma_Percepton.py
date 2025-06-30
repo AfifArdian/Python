@@ -17,11 +17,14 @@ wb=0
 alpha = 1
 treshold = float(0.2)
 
-looping = True
+
 # 2. Diulang/loop, selama semua perubahan bobot tidak nol – perulangan luar
-while looping:
+max_iter = 200
+loop = 0
+ulang = False
+while loop < max_iter and not ulang:
 # for j in range(11):
-    change = False
+    ulang = True
     for i in range(4):
         y_in=x1_float[i]*w1+x2_float[i]*w2+b*wb
         if y_in > treshold:
@@ -35,7 +38,7 @@ while looping:
             dw1 = alpha * x1_float[i] * t_float[i]
             dw2 = alpha * x2_float[i] * t_float[i]
             dwb = alpha * b * t_float[i]
-            change = True
+            ulang = False
         else:
             dw1 = 0
             dw2 = 0
@@ -44,9 +47,6 @@ while looping:
         w1 += dw1
         w2 += dw2
         wb += dwb
-
-        if not change:
-            looping = False
 
 print("Hasil Training")
 print(f"w1 = {w1}\nw2 = {w2}\nwb = {wb}")
