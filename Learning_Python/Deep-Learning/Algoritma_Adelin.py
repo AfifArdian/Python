@@ -35,7 +35,7 @@ while iteration < max_iteration and delta_total > treshold:
         dwb = alpha * (t[i] - y_in) * b
 
         # Akumulasi perubahan bobot
-
+        delta_total += abs(dw1) + abs(dw2) + abs(dwb)
 
         # Perbaharui nilai bobot (w)
         w1 += dw1
@@ -47,3 +47,26 @@ while iteration < max_iteration and delta_total > treshold:
 
 print("\nPelatihan selesai.")
 print(f"Bobot akhir: w1={round(w1)}, w2={round(w2)}, wb={wb:.4f}")
+
+
+# Proses Testing
+print("\n\nTesting")
+print("--------------------")
+print("x1  x2  b  y_in  y")
+print("--------------------")
+
+y_in = 0
+bias_int = []
+y_in_int = []
+for i in range(4):
+    y_in = (x1_float[i] * w1) + (x2_float[i] * w2) + (b * wb)
+    bias_int.append(int(b))
+    y_in_int.append(int(y_in))
+
+    if y_in >= 0:
+        y = 1
+    else:
+        y = -1
+
+    print(f"{x1[i]}\t{x2[i]}\t{bias_int[i]}\t{y_in_int[i]}\t{y}")
+print("--------------------")
