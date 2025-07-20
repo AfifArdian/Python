@@ -31,6 +31,9 @@ epoch = 0
 while epoch < max_iter:
     total_error = 0
     print(f"\nEpoch {epoch + 1}")
+    print("Forward Propagation")
+    print("---------------------------------------")
+    print("x1  x2  b   y_in    y")
 
     for i in range(4):
         # --- FORWARD PASS ---
@@ -46,47 +49,30 @@ while epoch < max_iter:
         y_in = b * w[0] + sum(z[j] * w[j + 1] for j in range(3))
         y = 1 / (1 + pow(EXPONENTIAL, -y_in))
 
+        print(f"{round(x1[i])}   {round(x2[i])}   {round(b)}   {round(y_in, 2)}   {round(y, 2)}")
+
         # --- BACKWARD PASS ---
         # Output layer delta
-        delta = (t[i] - y) * y * (1 - y)
+        teta = (t[i] - y) * y * (1 - y)
 
         # Update bobot output layer
-        w[0] += alpha * delta * b
+        w[0] += alpha * teta * b
         for j in range(3):
-            w[j + 1] += alpha * delta * z[j]
+            w[j + 1] += alpha * teta * z[j]
 
         # Hidden layer delta dan update bobot
         for j in range(3):
-            delta_in = delta * w[j + 1]
-            delta_hidden = delta_in * z[j] * (1 - z[j])
+            teta_in = teta * w[j + 1]
+            teta_hidden = teta_in * z[j] * (1 - z[j])
 
             # Update bobot v[input][j]
-            v[0][j] += alpha * delta_hidden * b  # bias
-            v[1][j] += alpha * delta_hidden * x1[i]  # x1
-            v[2][j] += alpha * delta_hidden * x2[i]  # x2
+            v[0][j] += alpha * teta_hidden * b  # bias
+            v[1][j] += alpha * teta_hidden * x1[i]  # x1
+            v[2][j] += alpha * teta_hidden * x2[i]  # x2
 
-        # Monitoring
-        y_bin = 1 if y >= 0.5 else 0
-        error = (t[i] - y) ** 2
-        total_error += error
-        print(f"Data ke-{i + 1}: Target={t[i]}, Output={y:.4f}, Binary={y_bin}, Error={error:.6f}")
 
     epoch += 1
+    print("---------------------------------------\n")
 
-# === Evaluasi Akhir ===
-print("\n=== Evaluasi Akhir ===")
-print("--------------------")
-print("x1  x2  b  y_in  y")
-print("--------------------")
-correct = 0
-for i in range(4):
-    z = []
-    for j in range(3):
-        zin = b * v[0][j] + x1[i] * v[1][j] + x2[i] * v[2][j]
-        z.append(1 / (1 + pow(EXPONENTIAL, -zin)))
 
-    y_in = b * w[0] + sum(z[j] * w[j + 1] for j in range(3))
-    y = 1 / (1 + pow(EXPONENTIAL, -y_in))
-    y_bin = 1 if y >= 0.5 else 0
 
-    print(f"x1={int(x1[i])}, x2={int(x2[i])} => Prediksi: {y_bin}, Target: {int(t[i])}")
