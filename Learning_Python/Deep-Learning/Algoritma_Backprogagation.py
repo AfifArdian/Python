@@ -34,9 +34,9 @@ print("Bobot Awal/inisialisasi")
 print("----------------------------------------------------")
 for i in range(3):
     for j in range(3):
-        print(f"v[{i}][{j}] = {v[i][j]:.3f}")
+        print(f"v[{i}][{j}] = {round(v[i][j], 3)}")
 for j in range(4):
-    print(f"w[{j}] = {w[j]:.3f}")
+    print(f"w[{j}] = {round(w[j], 3)}")
 
 print("----------------------------------------------------")
 
@@ -118,9 +118,9 @@ print(f"Bobot setelah proses training sebanyak {epoch} iterasi")
 print("----------------------------------------------------")
 for i in range(3):
     for j in range(3):
-        print(f"v[{i}][{j}] = {v[i][j]:.3f}")
+        print(f"v[{i}][{j}] = {round(v[i][j], 3)}")
 for j in range(4):
-    print(f"w[{j}] = {w[j]:.3f}")
+    print(f"w[{j}] = {round(w[j], 3)}")
 print("----------------------------------------------------")
 
 # Testing
@@ -146,5 +146,5 @@ for d in range(4):
     # y = 1 / (1 + math.exp(-y_in))
     y = 1 / (1 + pow(EKSPONESIAL, -y_in))
 
-    print(f"{x[d][0]:2.0f}  {x[d][1]:2.0f}   {b:2.0f}   {round(y):.0f}")
+    print(f" {x[d][0]}   {x[d][1]}    {b}   {round(y)}")
 print("---------------")
