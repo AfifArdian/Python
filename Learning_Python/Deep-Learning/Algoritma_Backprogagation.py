@@ -1,78 +1,103 @@
-# Data XOR
-x1 = [1, 1, 0, 0]
-x2 = [1, 0, 1, 0]
-t = [0, 1, 1, 0]  # XOR target
+import random
+import math
 
-# Konversi ke float
-x1 = [float(i) for i in x1]
-x2 = [float(i) for i in x2]
-t = [float(i) for i in t]
-b = 1.0
-alpha = 0.2
-EXPONENTIAL = 2.7182
-threshold = 0.01
-
-# Inisialisasi bobot (input to hidden)
-# Format: v[input][neuron_hidden]
-v = [
-    [-0.3, 0.3, 0.3],  # bias to z1, z2, z3
-    [0.2, 0.3, -0.1],  # x1 to z1, z2, z3
-    [0.3, 0.1, -0.1]  # x2 to z1, z2, z3
+x = [
+    [1, 1],
+    [1, 0],
+    [0, 1],
+    [0, 0]
 ]
+t = [0, 1, 1, 0]
+b = 1
 
-# Inisialisasi bobot (hidden to output)
-# Format: w[neuron_hidden + bias]
-w = [-0.1, 0.5, -0.3, -0.4]  # bias, z1, z2, z3
+# Inisialisasi bobot secara acak antara -1 dan 1
+v = [[random.uniform(-1, 1) for _ in range(3)] for _ in range(3)]
+w = [random.uniform(-1, 1) for _ in range(4)]
+
+dv = [[0] * 3 for _ in range(3)]
+dw = [0] * 4
+z = [0] * 3
+teta_in = [0] * 3
+teta_h = [0] * 3
+
+alpha = 0.8
+max_iter = 1000
+threshold_mse = 0.01
+k = 0
+ulang = True
+
+print("Bobot Awal/inisialisasi\n")
+for i in range(3):
+    for j in range(3):
+        print(f"v[{i}][{j}] = {v[i][j]:.3f}")
+for j in range(4):
+    print(f"w[{j}] = {w[j]:.3f}")
 
 # Training
-max_iter = 200
-epoch = 0
+while k < max_iter and ulang:
+    t_error = 0
 
-while epoch < max_iter:
-    total_error = 0
-    print(f"\nEpoch {epoch + 1}")
-    print("Forward Propagation")
-    print("---------------------------------------")
-    print("x1  x2  b   y_in    y")
-
-    for i in range(4):
-        # --- FORWARD PASS ---
-        # Hitung z_in dan z
-        z_in = []
-        z = []
-        for j in range(3):  # untuk z1, z2, z3
-            zin = b * v[0][j] + x1[i] * v[1][j] + x2[i] * v[2][j]
-            z_in.append(zin)
-            z.append(1 / (1 + pow(EXPONENTIAL, -zin)))
-
-        # Hitung y_in dan y (output)
-        y_in = b * w[0] + sum(z[j] * w[j + 1] for j in range(3))
-        y = 1 / (1 + pow(EXPONENTIAL, -y_in))
-
-        print(f"{round(x1[i])}   {round(x2[i])}   {round(b)}   {round(y_in, 2)}   {round(y, 2)}")
-
-        # --- BACKWARD PASS ---
-        # Output layer delta
-        teta = (t[i] - y) * y * (1 - y)
-
-        # Update bobot output layer
-        w[0] += alpha * teta * b
+    for d in range(4):
         for j in range(3):
-            w[j + 1] += alpha * teta * z[j]
+            z_in = b * v[j][0]
+            for i in range(2):
+                z_in += x[d][i] * v[j][i + 1]
+            z[j] = 1 / (1 + math.exp(-z_in))
 
-        # Hidden layer delta dan update bobot
+        y_in = b * w[0]
         for j in range(3):
-            teta_in = teta * w[j + 1]
-            teta_hidden = teta_in * z[j] * (1 - z[j])
+            y_in += z[j] * w[j + 1]
+        y = 1 / (1 + math.exp(-y_in))
 
-            # Update bobot v[input][j]
-            v[0][j] += alpha * teta_hidden * b  # bias
-            v[1][j] += alpha * teta_hidden * x1[i]  # x1
-            v[2][j] += alpha * teta_hidden * x2[i]  # x2
+        error = t[d] - y
+        t_error += error ** 2
 
+        teta = error * y * (1 - y)
 
-    epoch += 1
-    print("---------------------------------------\n")
+        dw[0] = alpha * teta * b
+        for j in range(3):
+            dw[j + 1] = alpha * teta * z[j]
 
+        for j in range(3):
+            teta_in[j] = teta * w[j + 1]
+            teta_h[j] = teta_in[j] * z[j] * (1 - z[j])
+            dv[j][0] = alpha * teta_h[j] * b
+            for i in range(2):
+                dv[j][i + 1] = alpha * teta_h[j] * x[d][i]
 
+        for j in range(4):
+            w[j] += dw[j]
+        for j in range(3):
+            for i in range(3):
+                v[j][i] += dv[j][i]
 
+    mse = t_error / 4
+    if mse < threshold_mse:
+        ulang = False
+    k += 1
+
+print(f"\n\nBobot setelah proses training sebanyak {k} iterasi\n")
+for i in range(3):
+    for j in range(3):
+        print(f"v[{i}][{j}] = {v[i][j]:.3f}")
+for j in range(4):
+    print(f"w[{j}] = {w[j]:.3f}")
+
+# Testing
+print("\n\nProses Testing\n")
+print("x1  x2   b   y")
+print("--------------------")
+for d in range(4):
+    for j in range(3):
+        z_in = b * v[j][0]
+        for i in range(2):
+            z_in += x[d][i] * v[j][i + 1]
+        z[j] = 1 / (1 + math.exp(-z_in))
+
+    y_in = b * w[0]
+    for j in range(3):
+        y_in += z[j] * w[j + 1]
+    y = 1 / (1 + math.exp(-y_in))
+
+    print(f"{x[d][0]:2.0f} {x[d][1]:2.0f}   {b:2.0f}   {round(y):.0f}")
+print("--------------------")
