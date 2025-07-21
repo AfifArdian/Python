@@ -1,10 +1,13 @@
 import random
+# Menggunakan library math, jika ingin menggunakan fungsi math.exp dari pada menggunakan pow()
 import math
 
 # PROSES PEMBELAJARAN (MENGHITUNG BOBOT)
 # DALAM NEURAL NETWORK DISEBUT DENGAN ISTILAH TRAINING (PELATIHAN)
 # ----------------------------------------------------------------
 # Deklarasi neuron masukkan x1 dan neuron masukkan x2: [ x1, x2]
+EKSPONESIAL = 2.7182
+
 x = [
     [1, 1],
     [1, 0],
@@ -54,13 +57,15 @@ while k < max_iter and ulang:
             z_in = b * v[j][0]
             for i in range(2):
                 z_in += x[d][i] * v[j][i + 1]
-            z[j] = 1 / (1 + math.exp(-z_in))
+            # z[j] = 1 / (1 + math.exp(-z_in))
+            z[j] = 1 / (1 + pow(EKSPONESIAL, -z_in))
 
         # Langkah 5: Hitung keluaran unit yk
         y_in = b * w[0]
         for j in range(3):
             y_in += z[j] * w[j + 1]
-        y = 1 / (1 + math.exp(-y_in))
+        # y = 1 / (1 + math.exp(-y_in))
+        y = 1 / (1 + pow(EKSPONESIAL, -y_in))
 
         # *************************************************
         # hitung total error
@@ -131,12 +136,14 @@ for d in range(4):
         z_in = b * v[j][0]
         for i in range(2):
             z_in += x[d][i] * v[j][i + 1]
-        z[j] = 1 / (1 + math.exp(-z_in))
+        # z[j] = 1 / (1 + math.exp(-z_in))
+        z[j] = 1 / (1 + pow(EKSPONESIAL, -z_in))
 
     y_in = b * w[0]
     for j in range(3):
         y_in += z[j] * w[j + 1]
-    y = 1 / (1 + math.exp(-y_in))
+    # y = 1 / (1 + math.exp(-y_in))
+    y = 1 / (1 + pow(EKSPONESIAL, -y_in))
 
     print(f"{x[d][0]:2.0f} {x[d][1]:2.0f}   {b:2.0f}   {round(y):.0f}")
 print("---------------")
