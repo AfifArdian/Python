@@ -18,7 +18,7 @@ t = [0, 1, 1, 0] # neuron target t, studi kasus: AND, OR, AND NOT, XOR
 b = 1
 
 # inisilisasi bobot (weight) dan hidden - menggunakan fungsi random (boleh negatif)
-v = [[random.uniform(-1, 1) for _ in range(3)] for _ in range(3)]
+v = [[random.uniform(-1, 1) for _ in range(3)] for _ in range(3)] # kolom pertama untuk bias, kolom kedua dan ketiga untuk x1 dan x2
 w = [random.uniform(-1, 1) for _ in range(4)]
 
 # Membuat array/list untuk menyimpan nilai delta_v, delta_w, teta_in, z, dan teta_hidden
